@@ -11,29 +11,44 @@
   <meta name="theme-color" content="#ffffff">
 
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --bg: #f4f7fa;
+      --card-bg: white;
+      --text: #333;
+      --accent: #28a745;
+    }
+
+    .dark-mode {
+      --bg: #1e1e1e;
+      --card-bg: #2d2d2d;
+      --text: #eee;
+      --accent: #4caf50;
+    }
 
     body {
       font-family: Arial, sans-serif;
-      background: #f4f7fa;
+      background: var(--bg);
       margin: 0;
       padding: 15px;
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
 
     h1 {
       text-align: center;
       font-size: 20px;
       margin-bottom: 20px;
-      color: #333;
+      color: var(--text);
     }
 
     .container {
       max-width: 500px;
       margin: auto;
-      background: white;
+      background: var(--card-bg);
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: background 0.3s;
     }
 
     .input-group {
@@ -54,13 +69,15 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      background: #fff;
+      color: #333;
     }
 
     button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      background-color: #28a745;
+      background-color: var(--accent);
       color: white;
       border: none;
       border-radius: 6px;
@@ -69,7 +86,7 @@
     }
 
     button:hover {
-      background-color: #218838;
+      opacity: 0.9;
     }
 
     .btn-secondary {
@@ -86,14 +103,24 @@
       font-size: 18px;
       font-weight: bold;
       text-align: center;
-      color: #333;
+      color: var(--text);
+    }
+
+    .toggle-theme {
+      float: right;
+      margin-top: -35px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
 <div class="container">
   <h1>Калькулятор отпуска</h1>
+  <button class="toggle-theme" onclick="toggleTheme()">🌙 / ☀️</button>
 
   <div class="input-group">
     <label for="tripName">Название поездки:</label>
@@ -184,6 +211,7 @@
         document.getElementById(id).value = saved;
       }
     });
+    loadTheme();
     calculateBudget();
   });
 
@@ -205,6 +233,17 @@
 
     document.getElementById("result").innerText = `Общий бюджет на отпуск: ${total.toFixed(2)} ₽`;
     document.title = `Калькулятор отпуска — ${total.toFixed(2)} ₽`;
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  }
+
+  function loadTheme() {
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
   }
 
   function saveTrip() {
