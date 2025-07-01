@@ -15,7 +15,7 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: yellow;
+      background: #f4f7fa;
       margin: 0;
       padding: 15px;
     }
@@ -24,13 +24,13 @@
       text-align: center;
       font-size: 20px;
       margin-bottom: 20px;
-      color: #fff;
+      color: #333;
     }
 
     .container {
       max-width: 500px;
       margin: auto;
-      background: linear-gradient(135deg, #FFD700, #007BFF, #28a745); /* Жёлто-сине-зелёный градиент */
+      background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -45,7 +45,6 @@
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 5px;
-      color: #fff;
     }
 
     input[type="text"],
@@ -55,36 +54,31 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      background: white;
-      color: #333;
     }
 
     button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      background-color: #fff;
-      color: #28a745;
-      border: 2px solid #28a745;
+      background-color: #28a745;
+      color: white;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
       margin-top: 10px;
-      transition: all 0.3s ease;
     }
 
     button:hover {
-      background-color: #e6ffe6;
+      background-color: #218838;
     }
 
     .btn-secondary {
-      background-color: #fff;
-      color: #6c757d;
-      border: 2px solid #6c757d;
+      background-color: #6c757d;
       margin-top: 5px;
     }
 
     .btn-secondary:hover {
-      background-color: #f1f1f1;
+      background-color: #5a6268;
     }
 
     .result {
@@ -92,7 +86,7 @@
       font-size: 18px;
       font-weight: bold;
       text-align: center;
-      color: #fff;
+      color: #333;
     }
   </style>
 </head>
@@ -334,7 +328,7 @@
   // Регистрация Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/vacation-calculator/service-worker.js')
+      navigator.serviceWorker.register('/service-worker.js')
         .then(registration => console.log('Service Worker зарегистрирован:', registration.scope))
         .catch(error => console.log('Ошибка регистрации Service Worker:', error));
     });
