@@ -1,21 +1,19 @@
 {
   "name": "Калькулятор отпуска",
   "short_name": "Калькулятор",
-  "start_url": "/vacation-calculator/",
+  "start_url": "./vacation-calculator/index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f4f7fa",
   "theme_color": "#28a745",
-  "description": "Приложение для расчёта бюджета отпуска",
-  "lang": "ru-RU",
-  "orientation": "portrait",
+  "description": "Помогает рассчитать бюджет на отпуск",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "vacation-calculator/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "vacation-calculator/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
