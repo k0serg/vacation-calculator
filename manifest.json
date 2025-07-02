@@ -1,7 +1,7 @@
 {
   "name": "Калькулятор отпуска",
   "short_name": "Калькулятор",
-  "start_url": "/",
+  "start_url": "/vacation-calculator/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#28a745",

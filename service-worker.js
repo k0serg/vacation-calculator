@@ -1,11 +1,11 @@
-const CACHE_NAME = 'vacation-calculator-cache-v2';
+const CACHE_NAME = 'vacation-calculator-cache-v5';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/service-worker.js',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/vacation-calculator/',
+  '/vacation-calculator/index.html',
+  '/vacation-calculator/manifest.json',
+  '/vacation-calculator/service-worker.js',
+  '/vacation-calculator/icons/icon-192x192.png',
+  '/vacation-calculator/icons/icon-512x512.png'
 ];
 
 // При установке — загружаем статические ресурсы в кэш
