@@ -7,7 +7,7 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="vacation-calculator/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <meta name="theme-color" content="#ffffff">
 
   <style>
@@ -30,10 +30,24 @@
     .container {
       max-width: 500px;
       margin: auto;
-      background: linear-gradient(135deg, #FFD700, #28a745, #007BFF); /* Жёлто-зелено-синий градиент */
+      background: url('img.jpeg') no-repeat center center;
+      background-size: cover;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Полупрозрачный белый слой поверх фона для улучшения читаемости */
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      z-index: -1;
+      border-radius: 10px;
     }
 
     .input-group {
@@ -45,7 +59,7 @@
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 5px;
-      color: #fff;
+      color: #333;
     }
 
     input[type="text"],
