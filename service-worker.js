@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vacation-calculator-cache-v6';
+const CACHE_NAME = 'vacation-calculator-cache-v7';
 const ASSETS_TO_CACHE = [
   '/vacation-calculator/',
   '/vacation-calculator/index.html',
