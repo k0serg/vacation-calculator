@@ -24,7 +24,7 @@
       text-align: center;
       font-size: 20px;
       margin-bottom: 20px;
-      color: #333;
+      color: #fff; /* белый цвет для заголовка */
     }
 
     .container {
@@ -35,9 +35,9 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      position: relative;
     }
 
-    /* Полупрозрачный белый слой поверх фона для улучшения читаемости */
     .container::before {
       content: "";
       position: absolute;
@@ -45,7 +45,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(0, 0, 0, 0.5); /* затемнённый слой для контраста */
       z-index: -1;
       border-radius: 10px;
     }
@@ -59,7 +59,7 @@
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 5px;
-      color: #333;
+      color: #fff; /* белый цвет для категорий */
     }
 
     input[type="text"],
@@ -77,6 +77,7 @@
       width: 100%;
       padding: 12px;
       font-size: 16px;
+      font-weight: bold; /* добавлен жирный шрифт для всех кнопок */
       background-color: #fff;
       color: #28a745;
       border: 2px solid #28a745;
@@ -106,7 +107,7 @@
       font-size: 18px;
       font-weight: bold;
       text-align: center;
-      color: #333;
+      color: #fff; /* белый цвет для результата */
     }
   </style>
 </head>
@@ -185,7 +186,6 @@
   const fields = ["tripName", "tickets", "fuel", "tolls", "onTheWay", "accommodation", "nights", "food", "transport", "entertainment", "other"];
   let saveTimeout;
 
-  // Сохранение данных с задержкой
   fields.forEach(id => {
     document.getElementById(id).addEventListener("input", () => {
       clearTimeout(saveTimeout);
@@ -343,7 +343,6 @@
     }
   }
 
-  // Регистрация Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/vacation-calculator/service-worker.js')
@@ -354,3 +353,4 @@
 </script>
 </body>
 </html>
+
