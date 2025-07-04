@@ -4,29 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Калькулятор отпуска</title>
-
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <meta name="theme-color" content="#ffffff">
-
   <style>
     * { box-sizing: border-box; }
-
     body {
       font-family: Arial, sans-serif;
       background: #fff;
       margin: 0;
       padding: 15px;
     }
-
     h1 {
       text-align: center;
       font-size: 20px;
       margin-bottom: 20px;
-      color: #fff; /* белый цвет для заголовка */
+      color: #fff;
     }
-
     .container {
       max-width: 500px;
       margin: auto;
@@ -37,7 +32,6 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       position: relative;
     }
-
     .container::before {
       content: "";
       position: absolute;
@@ -45,23 +39,20 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5); /* затемнённый слой для контраста */
+      background-color: rgba(0, 0, 0, 0.5);
       z-index: -1;
       border-radius: 10px;
     }
-
     .input-group {
       margin-bottom: 15px;
     }
-
     label {
       display: block;
       font-weight: bold;
       font-size: 14px;
       margin-bottom: 5px;
-      color: #fff; /* белый цвет для категорий */
+      color: #fff;
     }
-
     input[type="text"],
     input[type="number"] {
       width: 100%;
@@ -72,12 +63,11 @@
       background: white;
       color: #333;
     }
-
     button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      font-weight: bold; /* добавлен жирный шрифт для всех кнопок */
+      font-weight: bold;
       background-color: #fff;
       color: #28a745;
       border: 2px solid #28a745;
@@ -86,91 +76,74 @@
       margin-top: 10px;
       transition: all 0.3s ease;
     }
-
     button:hover {
       background-color: #e6ffe6;
     }
-
     .btn-secondary {
       background-color: #fff;
       color: #6c757d;
       border: 2px solid #6c757d;
       margin-top: 5px;
     }
-
     .btn-secondary:hover {
       background-color: #f1f1f1;
     }
-
     .result {
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
       text-align: center;
-      color: #fff; /* белый цвет для результата */
+      color: #fff;
     }
   </style>
 </head>
 <body>
-
 <div class="container">
   <h1>Калькулятор отпуска</h1>
-
   <div class="input-group">
     <label for="tripName">Название поездки:</label>
     <input type="text" id="tripName" placeholder="Например: Поездка в Крым" />
   </div>
-
   <div class="input-group">
     <label for="tickets">Билеты (руб):</label>
     <input type="number" id="tickets" placeholder="Авиа, ЖД или автобус..." />
   </div>
-
   <div class="input-group">
     <label for="fuel">Бензин (руб):</label>
     <input type="number" id="fuel" placeholder="Например: 5000" />
   </div>
-
   <div class="input-group">
     <label for="tolls">Платные дороги (руб):</label>
     <input type="number" id="tolls" placeholder="Например: 1500" />
   </div>
-
   <div class="input-group">
     <label for="onTheWay">Расходы в пути (руб):</label>
     <input type="number" id="onTheWay" placeholder="Перекусы, ночёвки..." />
   </div>
-
   <div class="input-group">
     <label for="accommodation">Проживание за ночь (руб):</label>
     <input type="number" id="accommodation" placeholder="Например: 5000" />
   </div>
-
   <div class="input-group">
     <label for="nights">Количество ночей:</label>
     <input type="number" id="nights" placeholder="Например: 7" />
   </div>
-
   <div class="input-group">
     <label for="food">Питание в день (руб):</label>
     <input type="number" id="food" placeholder="Например: 1500" />
   </div>
-
   <div class="input-group">
     <label for="transport">Транспорт внутри города (руб):</label>
     <input type="number" id="transport" placeholder="Например: 2000" />
   </div>
-
   <div class="input-group">
     <label for="entertainment">Развлечения / экскурсии (руб):</label>
     <input type="number" id="entertainment" placeholder="Например: 5000" />
   </div>
-
   <div class="input-group">
     <label for="other">Другие расходы (руб):</label>
     <input type="number" id="other" placeholder="Например: 1000" />
   </div>
-
   <button onclick="calculateBudget()">Рассчитать бюджет</button>
   <button class="btn-secondary" onclick="saveTrip()">Сохранить поездку</button>
   <button class="btn-secondary" onclick="loadTrips()">Загрузить поездку</button>
@@ -178,11 +151,53 @@
   <button class="btn-secondary" onclick="exportData()">Экспорт в JSON</button>
   <button class="btn-secondary" onclick="importDataPrompt()">Импорт из JSON</button>
   <button class="btn-secondary" onclick="clearAll()">Очистить данные</button>
-
   <div class="result" id="result"></div>
 </div>
 
 <script>
+  const DB_NAME = 'VacationCalculatorDB';
+  const STORE_NAME = 'formDataStore';
+  let db;
+
+  // Открытие/создание IndexedDB
+  const request = indexedDB.open(DB_NAME, 1);
+
+  request.onupgradeneeded = function(event) {
+    db = event.target.result;
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+    }
+  };
+
+  request.onsuccess = function(event) {
+    db = event.target.result;
+    loadFormData(); // Загружаем сохраненные данные после успешного подключения к БД
+  };
+
+  request.onerror = function(event) {
+    console.error("Ошибка открытия IndexedDB");
+  };
+
+  function saveToIndexedDB(key, value) {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    store.put({ id: key, value: value });
+  }
+
+  function getFromIndexedDB(key, callback) {
+    const transaction = db.transaction([STORE_NAME], "readonly");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(key);
+    request.onsuccess = () => callback(request.result ? request.result.value : null);
+  }
+
+  function clearIndexedDB(callback) {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.clear();
+    request.onsuccess = () => callback();
+  }
+
   const fields = ["tripName", "tickets", "fuel", "tolls", "onTheWay", "accommodation", "nights", "food", "transport", "entertainment", "other"];
   let saveTimeout;
 
@@ -190,20 +205,21 @@
     document.getElementById(id).addEventListener("input", () => {
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(() => {
-        localStorage.setItem(id, document.getElementById(id).value);
+        saveToIndexedDB(id, document.getElementById(id).value);
       }, 500);
     });
   });
 
-  window.addEventListener("load", () => {
+  function loadFormData() {
     fields.forEach(id => {
-      const saved = localStorage.getItem(id);
-      if (saved !== null) {
-        document.getElementById(id).value = saved;
-      }
+      getFromIndexedDB(id, (saved) => {
+        if (saved !== null) {
+          document.getElementById(id).value = saved;
+        }
+      });
     });
     calculateBudget();
-  });
+  }
 
   function calculateBudget() {
     const tickets = Math.max(0, parseFloat(document.getElementById("tickets").value) || 0);
@@ -216,11 +232,9 @@
     const transport = Math.max(0, parseFloat(document.getElementById("transport").value) || 0);
     const entertainment = Math.max(0, parseFloat(document.getElementById("entertainment").value) || 0);
     const other = Math.max(0, parseFloat(document.getElementById("other").value) || 0);
-
     const totalAccommodation = accommodation * nights;
     const totalFood = food * nights;
     const total = tickets + fuel + tolls + onTheWay + totalAccommodation + totalFood + transport + entertainment + other;
-
     document.getElementById("result").innerText = `Общий бюджет на отпуск: ${total.toFixed(2)} ₽`;
     document.title = `Калькулятор отпуска — ${total.toFixed(2)} ₽`;
   }
@@ -228,7 +242,6 @@
   function saveTrip() {
     const tripNameInput = document.getElementById("tripName");
     const tripName = tripNameInput.value.trim();
-
     if (!tripName) {
       tripNameInput.style.borderColor = "red";
       alert("Введите название поездки");
@@ -242,64 +255,68 @@
       data[id] = document.getElementById(id).value;
     });
 
-    let trips = JSON.parse(localStorage.getItem("trips")) || {};
-    trips[tripName] = data;
-    localStorage.setItem("trips", JSON.stringify(trips));
+    const trips = {};
+    getAllTrips((existingTrips) => {
+      const updatedTrips = { ...existingTrips, [tripName]: data };
+      saveToIndexedDB("trips", updatedTrips);
+      alert(`Поездка "${tripName}" сохранена`);
+    });
+  }
 
-    alert(`Поездка "${tripName}" сохранена`);
+  function getAllTrips(callback) {
+    getFromIndexedDB("trips", (saved) => {
+      callback(saved || {});
+    });
   }
 
   function loadTrips() {
-    const trips = JSON.parse(localStorage.getItem("trips")) || {};
-
-    if (Object.keys(trips).length === 0) {
-      alert("Нет сохранённых поездок");
-      return;
-    }
-
-    const tripNames = Object.keys(trips);
-    const tripName = prompt("Выберите поездку:\n" + tripNames.join(", "));
-    const data = trips[tripName];
-
-    if (data) {
-      fields.forEach(id => {
-        document.getElementById(id).value = data[id];
-      });
-      calculateBudget();
-    } else {
-      alert("Поездка не найдена");
-    }
+    getAllTrips(trips => {
+      if (Object.keys(trips).length === 0) {
+        alert("Нет сохранённых поездок");
+        return;
+      }
+      const tripNames = Object.keys(trips);
+      const tripName = prompt("Выберите поездку:\n" + tripNames.join(", "));
+      const data = trips[tripName];
+      if (data) {
+        fields.forEach(id => {
+          document.getElementById(id).value = data[id];
+        });
+        calculateBudget();
+      } else {
+        alert("Поездка не найдена");
+      }
+    });
   }
 
   function deleteTrip() {
-    const trips = JSON.parse(localStorage.getItem("trips")) || {};
-    if (Object.keys(trips).length === 0) {
-      alert("Нет сохранённых поездок");
-      return;
-    }
-
-    const tripName = prompt("Введите название поездки для удаления:");
-    if (!tripName) return;
-
-    if (trips[tripName]) {
-      delete trips[tripName];
-      localStorage.setItem("trips", JSON.stringify(trips));
-      alert(`Поездка "${tripName}" удалена`);
-    } else {
-      alert("Поездка не найдена");
-    }
+    getAllTrips(trips => {
+      if (Object.keys(trips).length === 0) {
+        alert("Нет сохранённых поездок");
+        return;
+      }
+      const tripName = prompt("Введите название поездки для удаления:");
+      if (!tripName) return;
+      if (trips[tripName]) {
+        delete trips[tripName];
+        saveToIndexedDB("trips", trips);
+        alert(`Поездка "${tripName}" удалена`);
+      } else {
+        alert("Поездка не найдена");
+      }
+    });
   }
 
   function exportData() {
-    const trips = JSON.parse(localStorage.getItem("trips")) || {};
-    const blob = new Blob([JSON.stringify(trips, null, 2)], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "travel_budget_export.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    getAllTrips(trips => {
+      const blob = new Blob([JSON.stringify(trips, null, 2)], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "travel_budget_export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
   }
 
   function importDataPrompt() {
@@ -309,36 +326,32 @@
     fileInput.onchange = e => {
       const file = e.target.files[0];
       const reader = new FileReader();
-
       reader.onload = function(event) {
         try {
           const imported = JSON.parse(event.target.result);
-          const trips = JSON.parse(localStorage.getItem("trips")) || {};
-          localStorage.setItem("trips", JSON.stringify({...trips, ...imported}));
-          alert("Данные успешно импортированы");
+          getAllTrips(existing => {
+            const merged = { ...existing, ...imported };
+            saveToIndexedDB("trips", merged);
+            alert("Данные успешно импортированы");
+          });
         } catch (e) {
           alert("Ошибка при чтении файла");
         }
       };
-
       reader.readAsText(file);
     };
-
     fileInput.click();
   }
 
   function clearAll() {
     if (confirm("Вы уверены, что хотите удалить все данные?")) {
-      localStorage.removeItem("trips");
-
+      saveToIndexedDB("trips", {});
       fields.forEach(id => {
         document.getElementById(id).value = "";
-        localStorage.removeItem(id);
+        saveToIndexedDB(id, "");
       });
-
       document.getElementById("result").innerText = "";
       document.title = "Калькулятор отпуска";
-
       alert("Все данные очищены");
     }
   }
@@ -353,4 +366,3 @@
 </script>
 </body>
 </html>
-
